@@ -4,7 +4,7 @@ set -e
 
 SCRIPT="k8s_worker_setup.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_NODES=(h2 h3 h4 h5)
+DEFAULT_NODES=(h2 h3 h4)
 
 if [[ $# -gt 0 ]]; then
     NODES=("$@")
