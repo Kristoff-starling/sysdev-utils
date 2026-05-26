@@ -4,12 +4,28 @@ set -e
 
 SCRIPT="k8s_worker_setup.sh"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-DEFAULT_NODES=(h2 h3 h4)
+
+build_worker_nodes() {
+    local cluster_size
+
+    while true; do
+        read -rp "How many nodes are in the cluster? " cluster_size
+        if [[ "$cluster_size" =~ ^[0-9]+$ && "$cluster_size" -ge 2 ]]; then
+            break
+        fi
+        echo "Please enter an integer greater than or equal to 2."
+    done
+
+    NODES=()
+    for ((node = 2; node <= cluster_size; node++)); do
+        NODES+=("h$node")
+    done
+}
 
 if [[ $# -gt 0 ]]; then
     NODES=("$@")
 else
-    NODES=("${DEFAULT_NODES[@]}")
+    build_worker_nodes
 fi
 
 pids=()
